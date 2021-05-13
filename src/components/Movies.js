@@ -1,12 +1,26 @@
 import React from 'react'
 import styled from "styled-components"
+import {selectMovies} from "../features/movie/movieSlice"
+import {useSelector} from "react-redux"
 
 const Movies = () => {
+const movies = useSelector(selectMovies)
+
+console.log("these are the movies ", movies)
+
   return (
     <Container>
-      <h4>Recommended for You</h4>
+      <h2>Recommended for You</h2>
       <Content>
-        <Wrap>
+        {movies &&
+        movies.map((movie)=> (
+          <Wrap key={movie.id}>
+          <img src={movie.cardImg} alt="" />
+        </Wrap>
+        ))
+        }
+        
+        {/* <Wrap>
           <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuMxb0IukSXoGQOJDMoA0lFZxX2Xdu7yO7nw&usqp=CAU" alt="" />
         </Wrap>
         <Wrap>
@@ -14,10 +28,7 @@ const Movies = () => {
         </Wrap>
         <Wrap>
           <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuMxb0IukSXoGQOJDMoA0lFZxX2Xdu7yO7nw&usqp=CAU" alt="" />
-        </Wrap>
-        <Wrap>
-          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuMxb0IukSXoGQOJDMoA0lFZxX2Xdu7yO7nw&usqp=CAU" alt="" />
-        </Wrap>
+        </Wrap> */}
       </Content>
     </Container>
   )
@@ -26,16 +37,15 @@ const Movies = () => {
 export default Movies
 
 const Container = styled.div`
-  width: 100%;
 
-  h4{
+  h2{
     margin-bottom: 1rem;
   } 
 `
 
 const Content = styled.div`
   display: grid;
-  grid-gap: 25px;
+  grid-gap: 20px;
   grid-template-columns: repeat(4, minmax(0, 1fr));
 `
 
@@ -53,11 +63,11 @@ const Wrap = styled.div`
       height: 100%;
       object-fit: cover;
     }
-
   &:hover{
     transform: scale(1.05);
     border-color: rgba(249, 249, 249 ,0.8);
     box-shadow: rgb(0 0 0 / 72%) 0 30px 22px -16px,
     rgb(0 0 0 / 72%) 0 30px 22px -10px;  
   }
+
 `
