@@ -1,14 +1,36 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import styled from "styled-components"
+import {useParams} from "react-router-dom"
+import db from "../firebase"
 
 const Detail = () => {
+  const {id} = useParams()
+  const [movie, setMovie] = useState()
+
+  useEffect(()=> {
+    //grab the movie info from DB
+    db.collection("movies")
+    .doc(id)
+    .get()
+    .then((doc)=>{
+      if(doc.exists){
+        //save the movie data
+        setMovie(doc.data())
+      }else{
+        //redirect to home page
+      }
+    })
+  },[])
+
   return (
     <Container>
+      {movie && (
+        <>
       <Background>
-        <img src="https://static.filmvandaag.nl/featured/disney-plus-beste-series.jpg" alt="" />
+        <img src={movie.backgroundImg} alt="" />
       </Background>
       <ImageTitle>
-        <img src="https://www.pngix.com/pngfile/big/10-107802_star-wars-logo-png-star-wars-png-transparent.png" alt="" />
+        <img src={movie.titleImg} alt="" />
       </ImageTitle>
       <Controls>
         <PlayButton>
@@ -27,11 +49,13 @@ const Detail = () => {
         </GroupWatchButton>
       </Controls>
       <SubTitle>
-        2018 ● 7m ● Family, Fantasy, SF
+        {movie.subTitle}
       </SubTitle>
       <Description>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum repudiandae minus cupiditate iure ut officia at hic fugit, iusto deserunt. Nihil veniam magni dolorum cum, consectetur corrupti alias non praesentium ea, quam totam eum rem perspiciatis temporibus ad! Delectus perspiciatis sunt vitae aliquid, temporibus eveniet libero unde nulla dicta eos!
+        {movie.description}
       </Description>
+      </>
+      )}
     </Container>
   )
 }
